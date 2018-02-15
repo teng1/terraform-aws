@@ -9,6 +9,7 @@ variable "region"             { }
 variable "private_subnets"    { }
 variable "public_subnets"     { }
 variable "private_subnet_tag" { }
+variable "bastion_instance_type" { }
 
 provider "aws" {
   region = "${var.region}"
@@ -24,6 +25,7 @@ module "network" {
   private_subnets = "${var.private_subnets}"
   public_subnets  = "${var.public_subnets}"
   private_subnet_tag = "${var.private_subnet_tag}"
+  bastion_instance_type = "${var.bastion_instance_type}"
   # route_zone_id   = "${terraform_remote_state.aws_global.output.zone_id}"
 }
 

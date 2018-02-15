@@ -11,6 +11,15 @@ variable "public_subnets"     { }
 variable "private_subnet_tag" { }
 # variable "route_zone_id"   { }
 
+variable "bastion_instance_type" { }
+
+variable "openvpn_instance_type" { }
+variable "openvpn_ami"           { }
+variable "openvpn_user"          { }
+variable "openvpn_admin_user"    { }
+variable "openvpn_admin_pw"      { }
+variable "openvpn_cidr"          { }
+
 module "vpc" {
   source = "./vpc"
 
@@ -46,10 +55,51 @@ module "private_subnets" {
   private_subnet_tag = "${var.private_subnet_tag}"
 }
 
+module "bastion" {
+  source = "./bastion"
+
+  name              = "${var.name}-bastion"
+  vpc_id            = "${module.vpc.vpc_id}"
+  vpc_cidr          = "${module.vpc.vpc_cidr}"
+  region            = "${var.region}"
+  public_subnet_ids = "${module.public_subnets.subnet_ids}"
+  # key_name          = "${var.key_name}"
+  instance_type     = "${var.bastion_instance_type}"
+}
+
+module "openvpn" {
+  source = "./openvpn"
+
+  name               = "${var.name}-openvpn"
+  vpc_id             = "${module.vpc.vpc_id}"
+  vpc_cidr           = "${module.vpc.vpc_cidr}"
+  public_subnet_ids  = "${module.public_subnet.subnet_ids}"
+  ssl_cert           = "${var.ssl_cert}"
+  ssl_key            = "${var.ssl_key}"
+  key_name           = "${var.key_name}"
+  private_key        = "${var.private_key}"
+  ami                = "${var.openvpn_ami}"
+  instance_type      = "${var.openvpn_instance_type}"
+  bastion_host       = "${module.bastion.public_ip}"
+  bastion_user       = "${module.bastion.user}"
+  openvpn_user       = "${var.openvpn_user}"
+  openvpn_admin_user = "${var.openvpn_admin_user}"
+  openvpn_admin_pw   = "${var.openvpn_admin_pw}"
+  vpn_cidr           = "${var.openvpn_cidr}"
+  sub_domain         = "${var.sub_domain}"
+  route_zone_id      = "${var.route_zone_id}"
+}
 
 # VPC
 output "vpc_id"   { value = "${module.vpc.vpc_id}" }
 output "vpc_cidr" { value = "${module.vpc.vpc_cidr}" }
 output "public_subnet_ids"  { value = "${module.public_subnets.subnet_ids}" }
 output "private_subnet_ids" { value = "${module.private_subnets.subnet_ids}" }
+
+# NAT
 output "nat_gateway_ids" { value = "${module.nat.nat_gateway_ids}" }
+
+# Bastion
+output "bastion_user"       { value = "${module.bastion.user}" }
+output "bastion_private_ip" { value = "${module.bastion.private_ip}" }
+output "bastion_public_ip"  { value = "${module.bastion.public_ip}" }
