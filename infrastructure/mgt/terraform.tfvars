@@ -19,3 +19,15 @@ bastion_instance_type = "t2.micro"
 #--------------------------------------------------------------
 # OpenVPN
 #--------------------------------------------------------------
+ # openvpn_instance_type = ""
+ # openvpn_ami           = ""
+ # openvpn_user          = ""
+ # openvpn_admin_user    = "admin"
+ # openvpn_admin_pw      = ""
+ # openvpn_cidr          = ""
+ # key_name              = ""
+ # private_key           = ""
+ # ssl_cert              = ""
+ # route_zone_id         = ""
+ # ssl_key               = ""
+ # sub_domain            = ""

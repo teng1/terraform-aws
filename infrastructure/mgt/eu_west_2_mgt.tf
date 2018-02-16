@@ -11,6 +11,20 @@ variable "public_subnets"     { }
 variable "private_subnet_tag" { }
 variable "bastion_instance_type" { }
 
+# openvpn_vars
+# variable "openvpn_instance_type" { }
+# variable "openvpn_ami"           { }
+# variable "openvpn_user"          { }
+# variable "openvpn_admin_user"    { }
+# variable "openvpn_admin_pw"      { }
+# variable "openvpn_cidr"          { }
+# variable "key_name"           { }
+# variable "private_key"        { }
+# variable "ssl_cert"           { }
+# variable "route_zone_id"      { }
+# variable "ssl_key"            { }
+# variable "sub_domain"         { }
+
 provider "aws" {
   region = "${var.region}"
 }
@@ -26,7 +40,6 @@ module "network" {
   public_subnets  = "${var.public_subnets}"
   private_subnet_tag = "${var.private_subnet_tag}"
   bastion_instance_type = "${var.bastion_instance_type}"
-  # route_zone_id   = "${terraform_remote_state.aws_global.output.zone_id}"
 }
 
 

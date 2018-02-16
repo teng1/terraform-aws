@@ -13,12 +13,21 @@ variable "private_subnet_tag" { }
 
 variable "bastion_instance_type" { }
 
-variable "openvpn_instance_type" { }
-variable "openvpn_ami"           { }
-variable "openvpn_user"          { }
-variable "openvpn_admin_user"    { }
-variable "openvpn_admin_pw"      { }
-variable "openvpn_cidr"          { }
+# openvpn vars
+# variable "openvpn_instance_type" { }
+# variable "openvpn_ami"           { }
+# variable "openvpn_user"          { }
+# variable "openvpn_admin_user"    { }
+# variable "openvpn_admin_pw"      { }
+# variable "openvpn_cidr"          { }
+# variable "key_name"           { }
+# variable "private_key"        { }
+# variable "ssl_cert"           { }
+# variable "route_zone_id"      { }
+# variable "ssl_key"            { }
+# variable "sub_domain"         { }
+
+
 
 module "vpc" {
   source = "./vpc"
@@ -67,28 +76,28 @@ module "bastion" {
   instance_type     = "${var.bastion_instance_type}"
 }
 
-module "openvpn" {
-  source = "./openvpn"
-
-  name               = "${var.name}-openvpn"
-  vpc_id             = "${module.vpc.vpc_id}"
-  vpc_cidr           = "${module.vpc.vpc_cidr}"
-  public_subnet_ids  = "${module.public_subnet.subnet_ids}"
-  ssl_cert           = "${var.ssl_cert}"
-  ssl_key            = "${var.ssl_key}"
-  key_name           = "${var.key_name}"
-  private_key        = "${var.private_key}"
-  ami                = "${var.openvpn_ami}"
-  instance_type      = "${var.openvpn_instance_type}"
-  bastion_host       = "${module.bastion.public_ip}"
-  bastion_user       = "${module.bastion.user}"
-  openvpn_user       = "${var.openvpn_user}"
-  openvpn_admin_user = "${var.openvpn_admin_user}"
-  openvpn_admin_pw   = "${var.openvpn_admin_pw}"
-  vpn_cidr           = "${var.openvpn_cidr}"
-  sub_domain         = "${var.sub_domain}"
-  route_zone_id      = "${var.route_zone_id}"
-}
+# module "openvpn" {
+#   source = "./openvpn"
+#
+#   name               = "${var.name}-openvpn"
+#   vpc_id             = "${module.vpc.vpc_id}"
+#   vpc_cidr           = "${module.vpc.vpc_cidr}"
+#   public_subnet_ids  = "${module.public_subnets.subnet_ids}"
+#   ssl_cert           = "${var.ssl_cert}"
+#   ssl_key            = "${var.ssl_key}"
+#   key_name           = "${var.key_name}"
+#   private_key        = "${var.private_key}"
+#   ami                = "${var.openvpn_ami}"
+#   instance_type      = "${var.openvpn_instance_type}"
+#   bastion_host       = "${module.bastion.public_ip}"
+#   bastion_user       = "${module.bastion.user}"
+#   openvpn_user       = "${var.openvpn_user}"
+#   openvpn_admin_user = "${var.openvpn_admin_user}"
+#   openvpn_admin_pw   = "${var.openvpn_admin_pw}"
+#   vpn_cidr           = "${var.openvpn_cidr}"
+#   sub_domain         = "${var.sub_domain}"
+#   route_zone_id      = "${var.route_zone_id}"
+# }
 
 # VPC
 output "vpc_id"   { value = "${module.vpc.vpc_id}" }
